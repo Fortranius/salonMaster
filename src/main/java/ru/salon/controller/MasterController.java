@@ -20,18 +20,18 @@ public class MasterController {
     }
 
     @GetMapping("/masters")
-    public Page<Master> getQuestions(Pageable pageable) {
+    public Page<Master> getMasters(Pageable pageable) {
         return masterRepository.findAll(pageable);
     }
 
 
     @PostMapping("/masters")
-    public Master createQuestion(@Valid @RequestBody Master master) {
+    public Master createMaster(@Valid @RequestBody Master master) {
         return masterRepository.save(master);
     }
 
     @DeleteMapping("/masters/{questionId}")
-    public ResponseEntity<?> deleteQuestion(@PathVariable Long questionId) {
+    public ResponseEntity<?> deleteMAster(@PathVariable Long questionId) {
         return masterRepository.findById(questionId)
                 .map(master -> {
                     masterRepository.delete(master);

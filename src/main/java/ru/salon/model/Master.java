@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "masters")
 @Getter
 @Setter
 public class Master extends AuditModel {
+
     @Id
     @GeneratedValue(generator = "master_generator")
     @SequenceGenerator(
@@ -21,5 +23,8 @@ public class Master extends AuditModel {
 
     @Embedded
     private Person person;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "master")
+    private Set<TimeSlot> timeSlots;
 
 }

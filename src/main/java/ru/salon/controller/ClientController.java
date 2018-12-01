@@ -15,7 +15,7 @@ public class ClientController {
     }
 
     @GetMapping("/clients/{clientId}")
-    public Client getAnswersByQuestionId(@PathVariable Long clientId) {
+    public Client getClient(@PathVariable Long clientId) {
         return clientRepository.findById(clientId)
                 .orElseThrow(() -> new ResourceNotFoundException("Master not found with id " + clientId));
     }

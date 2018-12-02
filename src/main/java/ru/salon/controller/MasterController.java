@@ -25,17 +25,17 @@ public class MasterController {
         return masterRepository.findAll(pageable);
     }
 
-    @PostMapping("/masters")
+    @PostMapping("/master")
     public Master createMaster(@Valid @RequestBody Master master) {
         return masterRepository.save(master);
     }
 
-    @DeleteMapping("/masters/{questionId}")
-    public ResponseEntity<?> deleteMAster(@PathVariable Long questionId) {
-        return masterRepository.findById(questionId)
+    @DeleteMapping("/master/{masterId}")
+    public ResponseEntity<?> deleteMAster(@PathVariable Long masterId) {
+        return masterRepository.findById(masterId)
                 .map(master -> {
                     masterRepository.delete(master);
                     return ResponseEntity.ok().build();
-                }).orElseThrow(() -> new ResourceNotFoundException("Master not found with id " + questionId));
+                }).orElseThrow(() -> new ResourceNotFoundException("Master not found with id " + masterId));
     }
 }

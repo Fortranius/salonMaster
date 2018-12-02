@@ -25,7 +25,6 @@ public class MasterController {
         return masterRepository.findAll(pageable);
     }
 
-
     @PostMapping("/masters")
     public Master createMaster(@Valid @RequestBody Master master) {
         return masterRepository.save(master);

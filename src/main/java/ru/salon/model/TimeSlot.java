@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -11,7 +12,7 @@ import java.time.Instant;
 @Table(name = "time_slots")
 @Getter
 @Setter
-public class TimeSlot extends AuditModel {
+public class TimeSlot extends AuditModel implements Serializable {
 
     @Id
     @GeneratedValue(generator = "time_slots_generator")

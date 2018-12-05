@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "masters")
 @Getter
 @Setter
-public class Master extends AuditModel {
+public class Master extends AuditModel implements Serializable {
 
     @Id
     @GeneratedValue(generator = "master_generator")

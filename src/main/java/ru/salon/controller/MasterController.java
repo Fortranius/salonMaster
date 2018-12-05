@@ -2,7 +2,6 @@ package ru.salon.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.salon.exception.ResourceNotFoundException;
@@ -31,7 +30,7 @@ public class MasterController {
         return masterRepository.save(master);
     }
 
-    @PutMapping(value = "/master", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/master")
     public Master updateMaster(@RequestBody Master master) {
         return masterRepository.save(master);
     }

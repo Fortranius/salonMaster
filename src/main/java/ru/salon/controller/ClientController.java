@@ -9,6 +9,7 @@ import ru.salon.model.Client;
 import ru.salon.repository.ClientRepository;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -21,8 +22,19 @@ public class ClientController {
     }
 
     @GetMapping("/clients")
-    public Page<Client> getMasters(Pageable pageable) {
+    public Page<Client> getClients(Pageable pageable) {
         return clientRepository.findAll(pageable);
+    }
+
+    @GetMapping("/clients/{filter}")
+    public List<Client> getClientsByFilter(@PathVariable String filter) {
+        return clientRepository.findByNameOrSurnameOrPatronymicContaining(filter);
+    }
+
+    @GetMapping("/clients/phone/{phone}")
+    public List<Client> getClientsByPhone(@PathVariable String phone) {
+        System.out.println("111111 " + phone);
+        return clientRepository.findByPhoneContaining(phone);
     }
 
     @GetMapping("/client/{clientId}")

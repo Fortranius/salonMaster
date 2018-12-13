@@ -25,6 +25,11 @@ public class MasterController {
         return masterRepository.findAll(pageable);
     }
 
+    @GetMapping("/masters/fio/{fio}")
+    public Page<Master> getClientsByFIO(@PathVariable String fio, Pageable pageable) {
+        return masterRepository.findByNameOrSurnameOrPatronymicContaining(fio, pageable);
+    }
+
     @PostMapping("/master")
     public Master createMaster(@Valid @RequestBody Master master) {
         return masterRepository.save(master);

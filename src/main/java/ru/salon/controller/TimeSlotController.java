@@ -28,4 +28,11 @@ public class TimeSlotController {
         return timeSlotRepository.save(timeSlot);
     }
 
+    @GetMapping("/timeSlotsByDate")
+    public Page<TimeSlot> getTimeSlotsByWeek(@RequestParam("start") String start, @RequestParam("end") String end, Pageable pageable) {
+        System.out.println("111111111");
+        System.out.println(start);
+        return timeSlotRepository.findAll(pageable);
+    }
+
 }

@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "masters")
@@ -24,8 +23,5 @@ public class Master extends AuditModel implements Serializable {
 
     @Embedded
     private Person person;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "master")
-    private Set<TimeSlot> timeSlots;
 
 }

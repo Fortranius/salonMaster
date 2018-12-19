@@ -1,6 +1,5 @@
 package ru.salon.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,11 +34,9 @@ public class TimeSlot extends AuditModel implements Serializable {
     private BigDecimal price;
 
     @Column(name = "start_slot")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ",timezone = "UTC")
     private Instant startSlot;
 
     @Column(name = "end_slot")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ",timezone = "UTC")
     private Instant endSlot;
 
 }

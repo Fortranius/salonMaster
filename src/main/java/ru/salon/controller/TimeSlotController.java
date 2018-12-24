@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.salon.model.TimeSlot;
+import ru.salon.repository.MasterRepository;
 import ru.salon.repository.TimeSlotRepository;
 
 import javax.validation.Valid;
@@ -19,9 +20,11 @@ public class TimeSlotController {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private TimeSlotRepository timeSlotRepository;
+    private MasterRepository masterRepository;
 
-    public TimeSlotController(TimeSlotRepository timeSlotRepository) {
+    public TimeSlotController(TimeSlotRepository timeSlotRepository, MasterRepository masterRepository) {
         this.timeSlotRepository = timeSlotRepository;
+        this.masterRepository = masterRepository;
     }
 
     @GetMapping("/timeSlots")
@@ -36,11 +39,12 @@ public class TimeSlotController {
 
     @GetMapping("/timeSlotsByDate")
     public Page<TimeSlot> getTimeSlotsByWeek(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,
-                                             @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end, Pageable pageable) {
+                                             @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end,
+                                             @RequestParam("masterId") Long masterId,
+                                             Pageable pageable) {
         return timeSlotRepository.findByStartAndEndDate(
                 LocalDateTime.parse(start, formatter).atZone(ZoneId.systemDefault()).toInstant(),
                 LocalDateTime.parse(end, formatter).atZone(ZoneId.systemDefault()).toInstant(),
                 pageable);
     }
-
 }

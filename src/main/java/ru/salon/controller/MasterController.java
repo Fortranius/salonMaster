@@ -41,7 +41,7 @@ public class MasterController {
     }
 
     @DeleteMapping("/master/{masterId}")
-    public ResponseEntity<?> deleteMAster(@PathVariable Long masterId) {
+    public ResponseEntity<?> deleteMaster(@PathVariable Long masterId) {
         return masterRepository.findById(masterId)
                 .map(master -> {
                     masterRepository.delete(master);

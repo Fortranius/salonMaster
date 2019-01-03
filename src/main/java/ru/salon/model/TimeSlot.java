@@ -39,4 +39,6 @@ public class TimeSlot extends AuditModel implements Serializable {
     @Column(name = "end_slot")
     private Instant endSlot;
 
+    @ManyToOne(fetch= FetchType.EAGER)
+    private Service service;
 }

@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "masters")
@@ -23,5 +24,11 @@ public class Master extends AuditModel implements Serializable {
 
     @Embedded
     private Person person;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Service> services;
 
 }

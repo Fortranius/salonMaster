@@ -41,4 +41,6 @@ public class TimeSlot extends AuditModel implements Serializable {
 
     @ManyToOne(fetch= FetchType.EAGER)
     private Service service;
+
+    private StatusOrder status;
 }

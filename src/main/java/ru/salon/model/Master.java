@@ -26,7 +26,7 @@ public class Master extends AuditModel implements Serializable {
     private Person person;
 
     @OneToMany(
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.MERGE,
             orphanRemoval = true
     )
     private List<Service> services;

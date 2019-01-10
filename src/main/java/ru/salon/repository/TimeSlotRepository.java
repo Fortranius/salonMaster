@@ -1,6 +1,8 @@
 package ru.salon.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.salon.model.Master;
 import ru.salon.model.TimeSlot;
@@ -14,4 +16,8 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlot, Long> {
     List<TimeSlot> findByStartSlotBetweenAndMaster(Instant start, Instant end, Master master);
     List<TimeSlot> findByStartSlotBetween(Instant start, Instant end);
 
+    @Query("SELECT SUM (ts.price) from TimeSlot ts where ts.master = :master")
+    int getSumIncomeByMaster(@Param("master") Master master);
+
+    List<TimeSlot> findByMaster(Master master);
 }

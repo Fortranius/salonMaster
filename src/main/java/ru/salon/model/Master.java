@@ -25,9 +25,8 @@ public class Master extends AuditModel implements Serializable {
     @Embedded
     private Person person;
 
-    @OneToMany(
-            cascade = CascadeType.MERGE,
-            orphanRemoval = true
+    @ManyToMany(
+            cascade = CascadeType.MERGE
     )
     private List<Service> services;
 

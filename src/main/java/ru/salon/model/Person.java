@@ -1,14 +1,12 @@
 package ru.salon.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
-@Getter
-@Setter
+@Data
 public class Person implements Serializable {
     private String name;
     private String surname;

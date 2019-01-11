@@ -1,7 +1,6 @@
 package ru.salon.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,8 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "masters")
-@Getter
-@Setter
+@Data
 public class Master extends AuditModel implements Serializable {
 
     @Id
@@ -25,9 +23,7 @@ public class Master extends AuditModel implements Serializable {
     @Embedded
     private Person person;
 
-    @ManyToMany(
-            cascade = CascadeType.MERGE
-    )
+    @ManyToMany
     private List<Service> services;
 
 }

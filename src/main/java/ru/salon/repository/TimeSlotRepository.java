@@ -16,8 +16,8 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlot, Long> {
     List<TimeSlot> findByStartSlotBetweenAndMaster(Instant start, Instant end, Master master);
     List<TimeSlot> findByStartSlotBetween(Instant start, Instant end);
 
-    @Query("SELECT SUM (ts.price) from TimeSlot ts where ts.master = :master")
-    int getSumIncomeByMaster(@Param("master") Master master);
+    @Query("Select ts from TimeSlot ts where ts.master = :master and ts.startSlot>:start and ts.startSlot<:end")
+    List<TimeSlot> findBetweenStartSlotAndMaster(@Param("master") Master master, @Param("start") Instant start, @Param("end") Instant end);
 
-    List<TimeSlot> findByMaster(Master master);
+    List<TimeSlot> findByMasterAndStartSlotAfterAndStartSlotBefore(Master master, Instant start, Instant end);
 }

@@ -9,6 +9,7 @@ import ru.salon.repository.MasterRepository;
 import ru.salon.repository.TimeSlotRepository;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,14 +28,17 @@ public class DashboardService {
         this.expenseRepository = expenseRepository;
     }
 
-    public List<MasterPerformance> getMastersIncomesAndCosts() {
+    public List<MasterPerformance> getMastersIncomesAndCosts(Instant start, Instant end) {
         List<Master> masters = masterRepository.findAll();
         return masters.stream().map(master -> {
             BigDecimal cost = expenseRepository.findByMaster(master).stream().map(expense ->
                 expense.getProduct().getPrice().multiply(BigDecimal.valueOf(expense.getCountProduct()))
             ).collect(Collectors.toList()).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-            BigDecimal sumIncome = timeSlotRepository.findByMaster(master).stream().map(TimeSlot::getPrice)
-                    .collect(Collectors.toList()).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+            List<TimeSlot> slots = timeSlotRepository.findBetweenStartSlotAndMaster(master, start, end);
+            System.out.println(slots);
+            BigDecimal sumIncome = timeSlotRepository.findBetweenStartSlotAndMaster(master, start, end)
+                    .stream().map(TimeSlot::getPrice).collect(Collectors.toList())
+                    .stream().reduce(BigDecimal.ZERO, BigDecimal::add);
             return new MasterPerformance(master, sumIncome, cost);
         }).collect(Collectors.toList());
     }

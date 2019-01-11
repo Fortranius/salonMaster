@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class TimeSlotController {
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private TimeSlotRepository timeSlotRepository;
     private MasterRepository masterRepository;

@@ -3,6 +3,7 @@ package ru.salon.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Table(name = "expense")
@@ -25,4 +26,6 @@ public class Expense extends AuditModel {
 
     @ManyToOne(fetch=FetchType.EAGER)
     private Master master;
+
+    private Instant date;
 }

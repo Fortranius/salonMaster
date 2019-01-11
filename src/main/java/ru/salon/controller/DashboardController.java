@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @RestController
@@ -27,15 +28,22 @@ public class DashboardController {
     }
 
     @GetMapping("/all")
-    public MasterPerformance getIncomesAndCost() {
-        return dashboardService.getAllIncomesAndCosts();
+    public MasterPerformance getIncomesAndCost(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,
+                                               @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end) {
+        Instant startSlot = LocalDateTime.parse(start, formatter).atZone(ZoneId.of("+0")).toInstant()
+                .minus(12, ChronoUnit.HOURS);
+        Instant endSlot = LocalDateTime.parse(end, formatter).atZone(ZoneId.of("+0")).toInstant()
+                .plus(1, ChronoUnit.DAYS);
+        return dashboardService.getAllIncomesAndCosts(startSlot, endSlot);
     }
 
     @GetMapping("/mastersBetweenStart")
     public List<MasterPerformance> getIncomesAndCostByMasterBetweenStart(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,
                                              @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end) {
-        Instant startSlot = LocalDateTime.parse(start, formatter).atZone(ZoneId.of("+0")).toInstant();
-        Instant endSlot = LocalDateTime.parse(end, formatter).atZone(ZoneId.of("+0")).toInstant();
+        Instant startSlot = LocalDateTime.parse(start, formatter).atZone(ZoneId.of("+0")).toInstant()
+                .minus(12, ChronoUnit.HOURS);
+        Instant endSlot = LocalDateTime.parse(end, formatter).atZone(ZoneId.of("+0")).toInstant()
+                .plus(1, ChronoUnit.DAYS);
         return dashboardService.getMastersIncomesAndCosts(startSlot, endSlot);
     }
 }

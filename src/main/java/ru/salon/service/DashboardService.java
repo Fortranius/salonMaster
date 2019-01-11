@@ -31,24 +31,23 @@ public class DashboardService {
     public List<MasterPerformance> getMastersIncomesAndCosts(Instant start, Instant end) {
         List<Master> masters = masterRepository.findAll();
         return masters.stream().map(master -> {
-            BigDecimal cost = expenseRepository.findByMaster(master).stream().map(expense ->
+            BigDecimal cost = expenseRepository.findByDateBetweenAndMaster(start, end, master).stream().map(expense ->
                 expense.getProduct().getPrice().multiply(BigDecimal.valueOf(expense.getCountProduct()))
             ).collect(Collectors.toList()).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-            List<TimeSlot> slots = timeSlotRepository.findBetweenStartSlotAndMaster(master, start, end);
-            System.out.println(slots);
-            BigDecimal sumIncome = timeSlotRepository.findBetweenStartSlotAndMaster(master, start, end)
+            BigDecimal sumIncome = timeSlotRepository.findByStartSlotBetweenAndMaster(start, end, master)
                     .stream().map(TimeSlot::getPrice).collect(Collectors.toList())
                     .stream().reduce(BigDecimal.ZERO, BigDecimal::add);
             return new MasterPerformance(master, sumIncome, cost);
         }).collect(Collectors.toList());
     }
 
-    public MasterPerformance getAllIncomesAndCosts() {
-        BigDecimal cost = expenseRepository.findAll().stream().map(expense ->
+    public MasterPerformance getAllIncomesAndCosts(Instant start, Instant end) {
+        BigDecimal cost = expenseRepository.findByDateBetween(start, end).stream().map(expense ->
                 expense.getProduct().getPrice().multiply(BigDecimal.valueOf(expense.getCountProduct()))
         ).collect(Collectors.toList()).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal sumIncome = timeSlotRepository.findAll().stream().map(TimeSlot::getPrice)
-                .collect(Collectors.toList()).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal sumIncome = timeSlotRepository.findByStartSlotBetween(start, end)
+                .stream().map(TimeSlot::getPrice).collect(Collectors.toList())
+                .stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         return new MasterPerformance(null, sumIncome, cost);
     }
 }

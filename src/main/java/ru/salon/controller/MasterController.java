@@ -9,6 +9,7 @@ import ru.salon.model.Master;
 import ru.salon.repository.MasterRepository;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -23,6 +24,11 @@ public class MasterController {
     @GetMapping("/masters")
     public Page<Master> getMasters(Pageable pageable) {
         return masterRepository.findAll(pageable);
+    }
+
+    @GetMapping("/allMasters")
+    public List<Master> getAllMasters() {
+        return masterRepository.findAll();
     }
 
     @GetMapping("/masters/fio/{fio}")

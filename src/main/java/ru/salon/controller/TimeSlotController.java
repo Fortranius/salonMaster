@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import ru.salon.model.Master;
 import ru.salon.model.TimeSlot;
 import ru.salon.repository.MasterRepository;
 import ru.salon.repository.TimeSlotRepository;
@@ -42,14 +41,10 @@ public class TimeSlotController {
 
     @GetMapping("/timeSlotsByDate")
     public List<TimeSlot> getTimeSlotsByWeek(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,
-                                             @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end,
-                                             @RequestParam("masterId") Long masterId) {
+                                             @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end) {
 
-        Master master = masterId != null ? masterRepository.findById(masterId).orElse(null) : null;
         Instant startSlot = LocalDateTime.parse(start, formatter).atZone(ZoneId.of("+0")).toInstant();
         Instant endSlot = LocalDateTime.parse(end, formatter).atZone(ZoneId.of("+0")).toInstant();
-        if (master != null)
-            return timeSlotRepository.findByStartSlotBetweenAndMaster(startSlot, endSlot, master);
         return timeSlotRepository.findByStartSlotBetween(startSlot, endSlot);
     }
 }

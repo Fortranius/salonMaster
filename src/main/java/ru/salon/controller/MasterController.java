@@ -31,9 +31,9 @@ public class MasterController {
         return masterRepository.findAll();
     }
 
-    @GetMapping("/masters/fio/{fio}")
-    public Page<Master> getClientsByFIO(@PathVariable String fio, Pageable pageable) {
-        return masterRepository.findByNameOrSurnameOrPatronymicContaining(fio, pageable);
+    @GetMapping("/masters/name/{name}")
+    public List<Master> getClientsByFIO(@PathVariable String name) {
+        return masterRepository.findByNameContaining(name);
     }
 
     @PostMapping("/master")

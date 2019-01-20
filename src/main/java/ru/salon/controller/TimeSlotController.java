@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.salon.model.TimeSlot;
-import ru.salon.repository.MasterRepository;
+import ru.salon.repository.ClientRepository;
 import ru.salon.repository.TimeSlotRepository;
 
 import javax.validation.Valid;
@@ -22,11 +22,12 @@ public class TimeSlotController {
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private TimeSlotRepository timeSlotRepository;
-    private MasterRepository masterRepository;
+    private ClientRepository clientRepository;
 
-    public TimeSlotController(TimeSlotRepository timeSlotRepository, MasterRepository masterRepository) {
+    public TimeSlotController(TimeSlotRepository timeSlotRepository,
+                              ClientRepository clientRepository) {
         this.timeSlotRepository = timeSlotRepository;
-        this.masterRepository = masterRepository;
+        this.clientRepository = clientRepository;
     }
 
     @GetMapping("/timeSlots")
@@ -36,6 +37,9 @@ public class TimeSlotController {
 
     @PostMapping("/timeSlot")
     public TimeSlot createTimeSlot(@Valid @RequestBody TimeSlot timeSlot) {
+        if (timeSlot.getClient().getId() == null) {
+            timeSlot.setClient(clientRepository.save(timeSlot.getClient()));
+        }
         return timeSlotRepository.save(timeSlot);
     }
 

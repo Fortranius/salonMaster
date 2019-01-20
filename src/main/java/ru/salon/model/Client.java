@@ -22,4 +22,6 @@ public class Client extends AuditModel implements Serializable {
 
     @Embedded
     private Person person;
+
+    private String description;
 }

@@ -9,8 +9,6 @@ import java.io.Serializable;
 @Data
 public class Person implements Serializable {
     private String name;
-    private String surname;
-    private String patronymic;
     private String phone;
     private String mail;
 }

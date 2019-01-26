@@ -51,4 +51,9 @@ public class TimeSlotController {
         Instant endSlot = LocalDateTime.parse(end, formatter).atZone(ZoneId.of("+0")).toInstant();
         return timeSlotRepository.findByStartSlotBetween(startSlot, endSlot);
     }
+
+    @GetMapping("/timeSlotsByClientId")
+    public List<TimeSlot> getTimeSlotsByClientId(@RequestParam("clientId") Long clientId) {
+        return timeSlotRepository.findByClientId(clientId);
+    }
 }

@@ -13,4 +13,5 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlot, Long> {
 
     List<TimeSlot> findByStartSlotBetweenAndMaster(Instant start, Instant end, Master master);
     List<TimeSlot> findByStartSlotBetween(Instant start, Instant end);
+    List<TimeSlot> findByClientId(Long clientId);
 }

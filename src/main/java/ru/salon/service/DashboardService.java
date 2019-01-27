@@ -37,7 +37,8 @@ public class DashboardService {
             BigDecimal sumIncome = timeSlotRepository.findByStartSlotBetweenAndMaster(start, end, master)
                     .stream().map(TimeSlot::getPrice).collect(Collectors.toList())
                     .stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-            return new MasterPerformance(master, sumIncome, cost);
+            int countOrders = timeSlotRepository.countByStartSlotBetweenAndMaster(start, end, master);
+            return new MasterPerformance(master, sumIncome, cost, BigDecimal.valueOf(countOrders));
         }).collect(Collectors.toList());
     }
 
@@ -48,6 +49,7 @@ public class DashboardService {
         BigDecimal sumIncome = timeSlotRepository.findByStartSlotBetween(start, end)
                 .stream().map(TimeSlot::getPrice).collect(Collectors.toList())
                 .stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-        return new MasterPerformance(null, sumIncome, cost);
+        long countOrders = timeSlotRepository.countByStartSlotBetween(start, end);
+        return new MasterPerformance(null, sumIncome, cost, BigDecimal.valueOf(countOrders));
     }
 }

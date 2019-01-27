@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "time_slots")
@@ -41,4 +42,7 @@ public class TimeSlot extends AuditModel implements Serializable {
     private Service service;
 
     private StatusOrder status;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Expense> expenses;
 }

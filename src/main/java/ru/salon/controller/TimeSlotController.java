@@ -37,9 +37,7 @@ public class TimeSlotController {
 
     @PostMapping("/timeSlot")
     public TimeSlot createTimeSlot(@Valid @RequestBody TimeSlot timeSlot) {
-        if (timeSlot.getClient().getId() == null) {
-            timeSlot.setClient(clientRepository.save(timeSlot.getClient()));
-        }
+        timeSlot.setClient(clientRepository.save(timeSlot.getClient()));
         return timeSlotRepository.save(timeSlot);
     }
 

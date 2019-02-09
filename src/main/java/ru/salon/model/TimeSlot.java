@@ -26,7 +26,7 @@ public class TimeSlot extends AuditModel implements Serializable {
     @JoinColumn(name = "master_id", nullable = false)
     private Master master;
 
-    @ManyToOne(fetch= FetchType.EAGER)
+    @ManyToOne(fetch= FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 

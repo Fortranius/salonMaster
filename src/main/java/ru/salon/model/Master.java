@@ -23,7 +23,7 @@ public class Master extends AuditModel implements Serializable {
     @Embedded
     private Person person;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Service> services;
 
     private String type;

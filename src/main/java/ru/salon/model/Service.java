@@ -3,7 +3,6 @@ package ru.salon.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "services")
@@ -20,8 +19,4 @@ public class Service extends AuditModel {
     private Long id;
 
     private String description;
-
-    private BigDecimal maxPrice;
-
-    private BigDecimal minPrice;
 }

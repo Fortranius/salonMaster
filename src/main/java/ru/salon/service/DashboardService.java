@@ -32,7 +32,7 @@ public class DashboardService {
         List<Master> masters = masterRepository.findAll();
         return masters.stream().map(master -> {
             BigDecimal cost = expenseRepository.findByDateBetweenAndMaster(start, end, master).stream().map(expense ->
-                expense.getProduct().getPrice().multiply(BigDecimal.valueOf(expense.getCountProduct()))
+                expense.getProduct().getPurchasePrice().multiply(BigDecimal.valueOf(expense.getCountProduct()))
             ).collect(Collectors.toList()).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
             BigDecimal sumIncome = timeSlotRepository.findByStartSlotBetweenAndMaster(start, end, master)
                     .stream().map(TimeSlot::getPrice).collect(Collectors.toList())
@@ -44,7 +44,7 @@ public class DashboardService {
 
     public MasterPerformance getAllIncomesAndCosts(Instant start, Instant end) {
         BigDecimal cost = expenseRepository.findByDateBetween(start, end).stream().map(expense ->
-                expense.getProduct().getPrice().multiply(BigDecimal.valueOf(expense.getCountProduct()))
+                expense.getProduct().getPurchasePrice().multiply(BigDecimal.valueOf(expense.getCountProduct()))
         ).collect(Collectors.toList()).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal sumIncome = timeSlotRepository.findByStartSlotBetween(start, end)
                 .stream().map(TimeSlot::getPrice).collect(Collectors.toList())

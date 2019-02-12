@@ -23,5 +23,7 @@ public class Product extends AuditModel {
 
     private String description;
 
-    private BigDecimal price;
+    private BigDecimal purchasePrice;
+
+    private BigDecimal sellingPrice;
 }

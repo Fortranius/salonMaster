@@ -26,6 +26,20 @@ public class ExpenseQueryService {
         if (criteria == null) {
             return specification;
         }
+        if (criteria.getMasterId() != null) {
+            specification = specification.and(expenseWithMaster(criteria.getMasterId()));
+        }
+        if (criteria.getProductId() != null) {
+            specification = specification.and(expenseWithProduct(criteria.getProductId()));
+        }
         return specification;
+    }
+
+    private static Specification<Expense> expenseWithMaster(final Long masterId) {
+        return (r, cq, cb) -> cb.equal(r.get("master").get("id"), masterId);
+    }
+
+    private static Specification<Expense> expenseWithProduct(final Long productId) {
+        return (r, cq, cb) -> cb.equal(r.get("product").get("id"), productId);
     }
 }

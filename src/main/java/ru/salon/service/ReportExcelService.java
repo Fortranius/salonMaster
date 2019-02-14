@@ -3,6 +3,7 @@ package ru.salon.service;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import ru.salon.model.Master;
@@ -35,32 +36,68 @@ public class ReportExcelService {
             Row rowSalary = sheet.createRow(3);
             rowMaster.createCell(0).setCellValue("Мастер");
 
-            CellStyle cellStyle = rowMaster.getSheet().getWorkbook().createCellStyle();
-            cellStyle.setBorderTop(BorderStyle.DOUBLE);
-            cellStyle.setBorderLeft(BorderStyle.DOUBLE);
-            cellStyle.setBorderRight(BorderStyle.DOUBLE);
-
-            cellStyle.setAlignment(HorizontalAlignment.CENTER);
-
             int cellNumber = 1;
             for (Master master: masters) {
                 Cell masterCell = rowMaster.createCell(cellNumber);
                 masterCell.setCellValue(master.getPerson().getName());
-                masterCell.setCellStyle(cellStyle);
-                sheet.addMergedRegion(new CellRangeAddress(2, 2, cellNumber, cellNumber + 3));
+                masterCell.setCellStyle(masterStyle(rowMaster));
 
-                rowSalary.createCell(cellNumber).setCellValue("услуги");
-                rowSalary.createCell(cellNumber+1).setCellValue("з/пл");
-                rowSalary.createCell(cellNumber+2).setCellValue("волосы");
-                rowSalary.createCell(cellNumber+3).setCellValue("клей, шт");
+                CellRangeAddress range = new CellRangeAddress(2, 2, cellNumber, cellNumber + 3);
+                sheet.addMergedRegion(range);
+                RegionUtil.setBorderTop(2, range, sheet);
+                RegionUtil.setBorderLeft(2, range, sheet);
+                RegionUtil.setBorderRight(2, range, sheet);
+
+                Cell serviceCell = rowSalary.createCell(cellNumber);
+                serviceCell.setCellValue("услуги");
+                serviceCell.setCellStyle(salaryDescriptionLeftStyle(rowSalary));
+
+                Cell salaryCell = rowSalary.createCell(cellNumber+1);
+                salaryCell.setCellValue("з/пл");
+                salaryCell.setCellStyle(salaryDescriptionMiddleStyle(rowSalary));
+
+                Cell hairCell = rowSalary.createCell(cellNumber+2);
+                hairCell.setCellValue("волосы");
+                hairCell.setCellStyle(salaryDescriptionMiddleStyle(rowSalary));
+
+                Cell klayCell = rowSalary.createCell(cellNumber+3);
+                klayCell.setCellValue("клей, шт");
+                klayCell.setCellStyle(salaryDescriptionRightStyle(rowSalary));
 
                 cellNumber = cellNumber + 4;
             }
 
-
-
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
         }
+    }
+
+    private CellStyle masterStyle(Row row) {
+        CellStyle cellStyleMaster = row.getSheet().getWorkbook().createCellStyle();
+        cellStyleMaster.setAlignment(HorizontalAlignment.CENTER);
+        return cellStyleMaster;
+    }
+
+    private CellStyle salaryDescriptionLeftStyle(Row row) {
+        CellStyle cellStyleMaster = row.getSheet().getWorkbook().createCellStyle();
+        cellStyleMaster.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyleMaster.setBorderLeft(BorderStyle.MEDIUM);
+        cellStyleMaster.setAlignment(HorizontalAlignment.CENTER);
+        return cellStyleMaster;
+    }
+
+    private CellStyle salaryDescriptionRightStyle(Row row) {
+        CellStyle cellStyleMaster = row.getSheet().getWorkbook().createCellStyle();
+        cellStyleMaster.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyleMaster.setBorderRight(BorderStyle.MEDIUM);
+        cellStyleMaster.setAlignment(HorizontalAlignment.CENTER);
+        return cellStyleMaster;
+    }
+
+    private CellStyle salaryDescriptionMiddleStyle(Row row) {
+        CellStyle cellStyleMaster = row.getSheet().getWorkbook().createCellStyle();
+        cellStyleMaster.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyleMaster.setAlignment(HorizontalAlignment.CENTER);
+        return cellStyleMaster;
     }
 }

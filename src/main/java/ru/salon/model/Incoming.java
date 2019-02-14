@@ -6,15 +6,15 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "expense")
+@Table(name = "incoming")
 @Data
-public class Expense extends AuditModel {
+public class Incoming extends AuditModel {
 
     @Id
-    @GeneratedValue(generator = "expense_generator")
+    @GeneratedValue(generator = "incoming_generator")
     @SequenceGenerator(
-            name = "expense_generator",
-            sequenceName = "expense_sequence",
+            name = "incoming_generator",
+            sequenceName = "incoming_sequence",
             initialValue = 1000
     )
     private Long id;
@@ -24,10 +24,5 @@ public class Expense extends AuditModel {
 
     private int countProduct;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    private Master master;
-
     private Instant date;
-
-    private Instant cost;
 }

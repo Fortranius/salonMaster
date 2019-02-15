@@ -50,6 +50,6 @@ public class HairService {
     }
 
     public List<Hair> getAllHairs() {
-        return hairRepository.findAll();
+        return hairRepository.findAllByOrderByMinLength();
     }
 }

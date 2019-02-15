@@ -51,4 +51,6 @@ public class TimeSlot extends AuditModel implements Serializable {
     private Hair hair;
 
     private BigDecimal hairWeight;
+
+    private BigDecimal hairCount;
 }

@@ -45,4 +45,10 @@ public class TimeSlot extends AuditModel implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses;
+
+    @ManyToOne(fetch= FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "hair_id")
+    private Hair hair;
+
+    private BigDecimal hairWeight;
 }

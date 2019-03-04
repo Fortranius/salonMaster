@@ -24,7 +24,7 @@ public class Master extends AuditModel implements Serializable {
     private Person person;
 
     @ManyToMany(cascade = {CascadeType.MERGE})
-    private List<Service> services;
+    private List<Procedure> procedures;
 
     @Enumerated(value = EnumType.STRING)
     private MasterCategory type;

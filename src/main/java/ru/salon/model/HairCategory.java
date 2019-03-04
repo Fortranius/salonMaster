@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HairCategory {
+public class HairCategory extends AuditModel{
 
     @Id
     @GeneratedValue(generator = "hair_category_generator")
@@ -28,5 +28,8 @@ public class HairCategory {
     private BigDecimal price;
 
     @Enumerated(value = EnumType.STRING)
-    private MasterCategory type;
+    private MasterCategory masterType;
+
+    @Enumerated(value = EnumType.STRING)
+    private HairType hairType;
 }

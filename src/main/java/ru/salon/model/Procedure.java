@@ -1,13 +1,19 @@
 package ru.salon.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "services")
+@Table(name = "procedures")
 @Data
-public class Service extends AuditModel {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Procedure extends AuditModel {
 
     @Id
     @GeneratedValue(generator = "service_generator")
@@ -19,4 +25,7 @@ public class Service extends AuditModel {
     private Long id;
 
     private String description;
+
+    @Enumerated(value = EnumType.STRING)
+    private HairType hairType;
 }

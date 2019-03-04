@@ -39,7 +39,7 @@ public class TimeSlot extends AuditModel implements Serializable {
     private Instant endSlot;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    private Service service;
+    private Procedure procedure;
 
     private StatusOrder status;
 

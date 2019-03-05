@@ -30,7 +30,9 @@ public class TimeSlot extends AuditModel implements Serializable {
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    private BigDecimal price;
+    private BigDecimal allPrice;
+
+    private BigDecimal masterWorkPrice;
 
     @Column(name = "start_slot")
     private Instant startSlot;
@@ -38,13 +40,10 @@ public class TimeSlot extends AuditModel implements Serializable {
     @Column(name = "end_slot")
     private Instant endSlot;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    private Procedure procedure;
-
     private StatusOrder status;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Expense> expenses;
+    @OneToMany(cascade = CascadeType.MERGE)
+    private List<Procedure> procedures;
 
     @ManyToOne(fetch= FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "hair_id")
@@ -52,5 +51,7 @@ public class TimeSlot extends AuditModel implements Serializable {
 
     private BigDecimal hairWeight;
 
-    private BigDecimal hairCount;
+    private BigDecimal hairCountExtension;
+
+    private BigDecimal hairCountRemoval;
 }

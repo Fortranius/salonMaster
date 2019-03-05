@@ -28,6 +28,4 @@ public class Expense extends AuditModel {
     private Master master;
 
     private Instant date;
-
-    private Instant cost;
 }

@@ -42,7 +42,7 @@ public class TimeSlot extends AuditModel implements Serializable {
 
     private StatusOrder status;
 
-    @OneToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = {CascadeType.MERGE})
     private List<Procedure> procedures;
 
     @ManyToOne(fetch= FetchType.EAGER, cascade = CascadeType.MERGE)

@@ -10,6 +10,8 @@ import ru.salon.dto.ExpenseCriteria;
 import ru.salon.model.Expense;
 import ru.salon.repository.ExpenseRepository;
 
+import java.time.Instant;
+
 @Service
 @AllArgsConstructor
 public class ExpenseQueryService {
@@ -32,6 +34,9 @@ public class ExpenseQueryService {
         if (criteria.getProductId() != null) {
             specification = specification.and(expenseWithProduct(criteria.getProductId()));
         }
+        if (criteria.getStart() != null) {
+            specification = specification.and(expenseWithDate(criteria.getStart(), criteria.getEnd()));
+        }
         return specification;
     }
 
@@ -41,5 +46,12 @@ public class ExpenseQueryService {
 
     private static Specification<Expense> expenseWithProduct(final Long productId) {
         return (r, cq, cb) -> cb.equal(r.get("product").get("id"), productId);
+    }
+
+    private static Specification<Expense> expenseWithDate(final Instant start, final Instant end) {
+        return (r, cq, cb) -> cb.and(
+                cb.greaterThan(r.get("date"), start),
+                cb.lessThan(r.get("date"), end)
+        );
     }
 }

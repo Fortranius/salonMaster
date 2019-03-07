@@ -1,5 +1,6 @@
 package ru.salon.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,20 +16,16 @@ import javax.validation.Valid;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+
+import static ru.salon.utils.Utils.FORMATTER;
 
 @RestController
 @RequestMapping("/api")
+@AllArgsConstructor
 public class ExpenseController {
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private ExpenseService expenseService;
     private ExpenseQueryService expenseQueryService;
-
-    public ExpenseController(ExpenseService expenseService, ExpenseQueryService expenseQueryService) {
-        this.expenseService = expenseService;
-        this.expenseQueryService = expenseQueryService;
-    }
 
     @GetMapping("/expenses")
     public Page<Expense> getExpensesBetween(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,
@@ -36,8 +33,8 @@ public class ExpenseController {
                                             @RequestParam(name = "masterId", required = false) Long masterId,
                                             @RequestParam(name = "productId", required = false) Long productId,
                                             Pageable pageable) {
-        Instant startSlot = LocalDateTime.parse(start, formatter).atZone(ZoneId.of("+0")).toInstant();
-        Instant endSlot = LocalDateTime.parse(end, formatter).atZone(ZoneId.of("+0")).toInstant();
+        Instant startSlot = LocalDateTime.parse(start, FORMATTER).atZone(ZoneId.of("+0")).toInstant();
+        Instant endSlot = LocalDateTime.parse(end, FORMATTER).atZone(ZoneId.of("+0")).toInstant();
         return expenseQueryService.findEntityByCriteria(ExpenseCriteria.builder()
                         .masterId(masterId)
                         .productId(productId)

@@ -1,4 +1,4 @@
-package ru.salon.service;
+package ru.salon.service.excel;
 
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;

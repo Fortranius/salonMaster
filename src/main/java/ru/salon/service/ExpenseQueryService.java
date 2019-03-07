@@ -3,6 +3,7 @@ package ru.salon.service;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,7 @@ import ru.salon.model.Expense;
 import ru.salon.repository.ExpenseRepository;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +23,11 @@ public class ExpenseQueryService {
     @Transactional(readOnly = true)
     public Page<Expense> findEntityByCriteria(ExpenseCriteria criteria, Pageable pageable) {
         return expenseRepository.findAll(createSpecification(criteria), pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Expense> findAllEntityByCriteria(ExpenseCriteria criteria, Sort sort) {
+        return expenseRepository.findAll(createSpecification(criteria), sort);
     }
 
     private Specification<Expense> createSpecification(ExpenseCriteria criteria) {

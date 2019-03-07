@@ -12,7 +12,10 @@ import ru.salon.repository.MasterRepository;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
+
+import static ru.salon.utils.Utils.DATE_FORMATTER;
 
 @Service
 @AllArgsConstructor
@@ -20,7 +23,7 @@ public class ReportExcelService {
 
     private MasterRepository masterRepository;
 
-    public ByteArrayInputStream  writeIntoExcel() throws IOException{
+    public ByteArrayInputStream  writeIntoExcel(Instant start, Instant end) throws IOException{
         try(
                 Workbook workbook = new XSSFWorkbook();
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -30,7 +33,7 @@ public class ReportExcelService {
             Sheet sheet = workbook.createSheet("Результат");
             Row row = sheet.createRow(0);
             Cell name = row.createCell(0);
-            name.setCellValue("РАБОТА МАСТЕРОВ");
+            name.setCellValue("РАБОТА МАСТЕРОВ С " + DATE_FORMATTER.format(start) + " ПО " + DATE_FORMATTER.format(end));
 
             Row rowMaster = sheet.createRow(2);
             Row rowSalary = sheet.createRow(3);

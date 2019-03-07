@@ -30,17 +30,6 @@ public class ReportController {
     private ReportExcelService reportExcelService;
     private ExpenseExcelService expenseExcelService;
 
-    @GetMapping("/getMastersReport")
-    public ResponseEntity<InputStreamResource> getMastersReport() throws IOException {
-        ByteArrayInputStream in = reportExcelService.writeIntoExcel();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=отчет.xlsx");
-        return ResponseEntity
-                .ok()
-                .headers(headers)
-                .body(new InputStreamResource(in));
-    }
-
     @GetMapping("/getExpensesReport")
     public ResponseEntity<InputStreamResource> getExpensesReport(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,
                                                                  @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end,
@@ -54,6 +43,20 @@ public class ReportController {
                 .productId(productId)
                 .start(startSlot)
                 .end(endSlot).build(), sort);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=отчет.xlsx");
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new InputStreamResource(in));
+    }
+
+    @GetMapping("/getMastersReport")
+    public ResponseEntity<InputStreamResource> getMastersReport(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,
+                                                                 @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end) throws IOException {
+        Instant startSlot = LocalDateTime.parse(start, FORMATTER).atZone(ZoneId.of("+0")).toInstant();
+        Instant endSlot = LocalDateTime.parse(end, FORMATTER).atZone(ZoneId.of("+0")).toInstant();
+        ByteArrayInputStream in = reportExcelService.writeIntoExcel(startSlot, endSlot);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=отчет.xlsx");
         return ResponseEntity

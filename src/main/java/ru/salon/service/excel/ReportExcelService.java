@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static ru.salon.utils.Utils.DATE_FORMATTER;
@@ -33,7 +34,7 @@ public class ReportExcelService {
             Sheet sheet = workbook.createSheet("Результат");
             Row row = sheet.createRow(0);
             Cell name = row.createCell(0);
-            name.setCellValue("РАБОТА МАСТЕРОВ С " + DATE_FORMATTER.format(start) + " ПО " + DATE_FORMATTER.format(end));
+            name.setCellValue("РАБОТА МАСТЕРОВ С " + DATE_FORMATTER.format(start) + " ПО " + DATE_FORMATTER.format(end.minus(1, ChronoUnit.DAYS)));
 
             Row rowMaster = sheet.createRow(2);
             Row rowSalary = sheet.createRow(3);
@@ -45,7 +46,7 @@ public class ReportExcelService {
                 masterCell.setCellValue(master.getPerson().getName());
                 masterCell.setCellStyle(masterStyle(rowMaster));
 
-                CellRangeAddress range = new CellRangeAddress(2, 2, cellNumber, cellNumber + 3);
+                CellRangeAddress range = new CellRangeAddress(2, 2, cellNumber, cellNumber + 1);
                 sheet.addMergedRegion(range);
                 RegionUtil.setBorderTop(2, range, sheet);
                 RegionUtil.setBorderLeft(2, range, sheet);
@@ -57,17 +58,9 @@ public class ReportExcelService {
 
                 Cell salaryCell = rowSalary.createCell(cellNumber+1);
                 salaryCell.setCellValue("з/пл");
-                salaryCell.setCellStyle(salaryDescriptionMiddleStyle(rowSalary));
+                salaryCell.setCellStyle(salaryDescriptionRightStyle(rowSalary));
 
-                Cell hairCell = rowSalary.createCell(cellNumber+2);
-                hairCell.setCellValue("волосы");
-                hairCell.setCellStyle(salaryDescriptionMiddleStyle(rowSalary));
-
-                Cell klayCell = rowSalary.createCell(cellNumber+3);
-                klayCell.setCellValue("клей, шт");
-                klayCell.setCellStyle(salaryDescriptionRightStyle(rowSalary));
-
-                cellNumber = cellNumber + 4;
+                cellNumber = cellNumber + 2;
             }
 
             workbook.write(out);
@@ -93,13 +86,6 @@ public class ReportExcelService {
         CellStyle cellStyleMaster = row.getSheet().getWorkbook().createCellStyle();
         cellStyleMaster.setBorderBottom(BorderStyle.MEDIUM);
         cellStyleMaster.setBorderRight(BorderStyle.MEDIUM);
-        cellStyleMaster.setAlignment(HorizontalAlignment.CENTER);
-        return cellStyleMaster;
-    }
-
-    private CellStyle salaryDescriptionMiddleStyle(Row row) {
-        CellStyle cellStyleMaster = row.getSheet().getWorkbook().createCellStyle();
-        cellStyleMaster.setBorderBottom(BorderStyle.MEDIUM);
         cellStyleMaster.setAlignment(HorizontalAlignment.CENTER);
         return cellStyleMaster;
     }

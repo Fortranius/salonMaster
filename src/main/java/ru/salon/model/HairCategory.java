@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.salon.model.enumiration.HairType;
+import ru.salon.model.enumiration.MasterCategory;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

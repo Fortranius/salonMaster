@@ -1,4 +1,4 @@
-package ru.salon.model;
+package ru.salon.model.enumiration;
 
 import lombok.Getter;
 

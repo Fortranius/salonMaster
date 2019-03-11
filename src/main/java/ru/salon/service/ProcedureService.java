@@ -2,8 +2,8 @@ package ru.salon.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.salon.model.HairType;
 import ru.salon.model.Procedure;
+import ru.salon.model.enumiration.HairType;
 import ru.salon.repository.ProcedureRepository;
 
 import javax.annotation.PostConstruct;

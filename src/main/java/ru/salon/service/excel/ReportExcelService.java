@@ -67,28 +67,16 @@ public class ReportExcelService {
         Instant currentDateStart = start;
         Instant currentDateEnd = start.plus(1, ChronoUnit.DAYS);
         while (currentDateStart.isBefore(end)) {
-            List<TimeSlot> timeSlots = timeSlotRepository
-                    .findByStartSlotBetweenAndMaster(currentDateStart, currentDateEnd, master);
-            BigDecimal sumIncome = timeSlots.stream().map(TimeSlot::getAllPrice).collect(Collectors.toList())
-                    .stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            BigDecimal sumIncomeMaster = timeSlots.stream().map(TimeSlot::getMasterWorkPrice).collect(Collectors.toList())
-                    .stream().reduce(BigDecimal.ZERO, BigDecimal::add).divide(BigDecimal.valueOf(2), 2);
-
-            sheet.getRow(rowNumber).createCell(cellNumber)
-                    .setCellValue(sumIncome.toString());
-            sheet.getRow(rowNumber).createCell(cellNumber + 1)
-                    .setCellValue(sumIncomeMaster.toString());
-
+            generateAllSum(currentDateStart, currentDateEnd, master, cellNumber, rowNumber);
             rowNumber++;
             currentDateStart = currentDateStart.plus(1, ChronoUnit.DAYS);
             currentDateEnd = currentDateEnd.plus(1, ChronoUnit.DAYS);
         }
 
-        generateAllSum(start, end, master, cellNumber);
+        generateAllSum(start, end, master, cellNumber, rowCount);
     }
 
-    private void generateAllSum(Instant start, Instant end, Master master, int cellNumber) {
+    private void generateAllSum(Instant start, Instant end, Master master, int cellNumber, int rowNumber) {
 
         List<TimeSlot> timeSlots = timeSlotRepository
                 .findByStartSlotBetweenAndMaster(start, end, master);

@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.salon.model.Hair;
 import ru.salon.model.HairCategory;
-import ru.salon.model.HairType;
-import ru.salon.model.MasterCategory;
+import ru.salon.model.enumiration.HairType;
+import ru.salon.model.enumiration.MasterCategory;
 import ru.salon.repository.HairCategoryRepository;
 import ru.salon.repository.HairRepository;
 

@@ -1,6 +1,7 @@
 package ru.salon.model;
 
 import lombok.Data;
+import ru.salon.model.enumiration.MasterCategory;
 
 import javax.persistence.*;
 import java.io.Serializable;

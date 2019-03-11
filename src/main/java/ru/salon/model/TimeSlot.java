@@ -1,6 +1,7 @@
 package ru.salon.model;
 
 import lombok.Data;
+import ru.salon.model.enumiration.StatusOrder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -54,4 +55,8 @@ public class TimeSlot extends AuditModel implements Serializable {
     private BigDecimal hairCountExtension;
 
     private BigDecimal hairCountRemoval;
+
+    @ElementCollection
+    @CollectionTable(name="changes", joinColumns=@JoinColumn(name="ID"))
+    private List<TimeSlotChange> changes;
 }

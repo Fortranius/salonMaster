@@ -2,9 +2,11 @@ package ru.salon.model;
 
 import lombok.Data;
 import ru.salon.model.enumiration.MasterCategory;
+import ru.salon.model.enumiration.WorkingDay;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -30,4 +32,8 @@ public class Master extends AuditModel implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private MasterCategory type;
 
+    @Enumerated(value = EnumType.STRING)
+    private WorkingDay workingDay;
+
+    private Instant startDateWork;
 }

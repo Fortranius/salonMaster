@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.salon.utils.Utils.FORMATTER;
 
@@ -39,6 +40,14 @@ public class MasterController {
     @GetMapping("/allMastersByWorkDay")
     public List<Master> getAllMastersByWorkDay(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String date) {
         return masterService.getMastersByWorkDay(LocalDateTime.parse(date, FORMATTER).atZone(ZoneId.of("+0")).toInstant());
+    }
+
+    @GetMapping("/allMastersByDayOff")
+    public List<Master> getAllMastersByDayOff(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String date) {
+        List<Master> mastersWorkDay = masterService.getMastersByWorkDay(LocalDateTime.parse(date, FORMATTER).atZone(ZoneId.of("+0")).toInstant());
+        return masterRepository.findAll().stream()
+                .filter(master -> !mastersWorkDay.contains(master))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/masters/name/{name}")

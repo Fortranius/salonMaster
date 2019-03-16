@@ -20,9 +20,10 @@ public class MasterService {
     public List<Master> getMastersByWorkDay(Instant day) {
         return masterRepository.findAll().stream().filter(master -> {
             long diff = DAYS.between(master.getStartDateWork(), day) + 1;
+            if (diff % 7 == 0) return true;
             if (diff<=0) return false;
             long current = diff % (master.getWorkingDay().getWorkDay() + master.getWorkingDay().getDayOff());
-            return current <= master.getWorkingDay().getWorkDay() && current>0;
+            return current < master.getWorkingDay().getWorkDay() && current>0;
         }).collect(Collectors.toList());
     }
 }

@@ -7,6 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import ru.salon.model.Master;
 import ru.salon.model.TimeSlot;
+import ru.salon.model.enumiration.StatusOrder;
 import ru.salon.repository.MasterRepository;
 import ru.salon.repository.TimeSlotRepository;
 
@@ -79,7 +80,7 @@ public class ReportExcelService {
     private void generateAllSum(Instant start, Instant end, Master master, int cellNumber, int rowNumber) {
 
         List<TimeSlot> timeSlots = timeSlotRepository
-                .findByStartSlotBetweenAndMaster(start, end, master);
+                .findByStartSlotBetweenAndMasterAndStatus(start, end, master, StatusOrder.DONE);
 
         BigDecimal sumIncome = timeSlots.stream().map(TimeSlot::getAllPrice).collect(Collectors.toList())
                 .stream().reduce(BigDecimal.ZERO, BigDecimal::add);

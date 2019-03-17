@@ -86,9 +86,9 @@ public class ReportExcelService {
 
         BigDecimal sumIncomeMaster = timeSlots.stream().map(TimeSlot::getMasterWorkPrice).collect(Collectors.toList())
                 .stream().reduce(BigDecimal.ZERO, BigDecimal::add).divide(BigDecimal.valueOf(2), 2);
-        sheet.getRow(rowCount).createCell(cellNumber)
+        sheet.getRow(rowNumber).createCell(cellNumber)
                 .setCellValue(sumIncome.toString());
-        sheet.getRow(rowCount).createCell(cellNumber + 1)
+        sheet.getRow(rowNumber).createCell(cellNumber + 1)
                 .setCellValue(sumIncomeMaster.toString());
     }
 

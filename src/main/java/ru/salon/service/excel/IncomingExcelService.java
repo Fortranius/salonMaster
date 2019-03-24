@@ -49,7 +49,6 @@ public class IncomingExcelService {
         sheet.setColumnWidth(0, 4000);
         sheet.setColumnWidth(1, 4500);
         sheet.setColumnWidth(2, 3500);
-        sheet.setColumnWidth(3, 4500);
 
         Row row = sheet.createRow(0);
         Cell name = row.createCell(0);

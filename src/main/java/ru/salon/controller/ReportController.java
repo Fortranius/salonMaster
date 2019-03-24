@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.salon.dto.AdditionalIncomeCriteria;
 import ru.salon.dto.ExpenseCriteria;
 import ru.salon.dto.IncomingCriteria;
+import ru.salon.service.excel.AdditionalIncomeExcelService;
 import ru.salon.service.excel.ExpenseExcelService;
 import ru.salon.service.excel.IncomingExcelService;
 import ru.salon.service.excel.ReportExcelService;
@@ -32,6 +34,26 @@ public class ReportController {
     private ReportExcelService reportExcelService;
     private ExpenseExcelService expenseExcelService;
     private IncomingExcelService incomingExcelService;
+    private AdditionalIncomeExcelService additionalIncomeExcelService;
+
+    @GetMapping("/getAdditionalIncomingReport")
+    public ResponseEntity<InputStreamResource> getAdditionalIncomingReport(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,
+                                                                 @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end,
+                                                                 @RequestParam(name = "masterId", required = false) Long masterId,
+                                                                 Sort sort) throws IOException {
+        Instant startSlot = LocalDateTime.parse(start, FORMATTER).atZone(ZoneId.of("+0")).toInstant();
+        Instant endSlot = LocalDateTime.parse(end, FORMATTER).atZone(ZoneId.of("+0")).toInstant();
+        ByteArrayInputStream in = additionalIncomeExcelService.getReport(AdditionalIncomeCriteria.builder()
+                .masterId(masterId)
+                .start(startSlot)
+                .end(endSlot).build(), sort);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=отчет.xlsx");
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new InputStreamResource(in));
+    }
 
     @GetMapping("/getIncomingReport")
     public ResponseEntity<InputStreamResource> getIncomingReport(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,

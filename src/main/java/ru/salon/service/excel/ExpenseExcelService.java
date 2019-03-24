@@ -39,7 +39,7 @@ public class ExpenseExcelService {
 
             reportAllExpense(workbook, criteria, expenses);
             reportAllExpenseByMaster(workbook, expenses);
-            reportAllExpenseByExpense(workbook, expenses);
+            reportAllExpenseByProduct(workbook, expenses);
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
         }
@@ -108,7 +108,7 @@ public class ExpenseExcelService {
         }
     }
 
-    private void reportAllExpenseByExpense(Workbook workbook, List<Expense> expenses) {
+    private void reportAllExpenseByProduct(Workbook workbook, List<Expense> expenses) {
         Sheet sheet = workbook.createSheet("Детализация расходов по товарам");
         initSheet(sheet, "Продукт");
 

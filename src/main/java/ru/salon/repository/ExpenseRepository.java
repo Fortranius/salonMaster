@@ -18,6 +18,8 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpec
     List<Expense> findByDateBetweenAndMaster(Instant start, Instant end, Master master);
     List<Expense> findByDateBetween(Instant start, Instant end);
 
+    Expense findByTimeSlotId(Long id);
+
     @Query("SELECT sum(expense.countProduct) from Expense expense where expense.product.id = :productId")
     Optional<Long> sumCountProduct(@Param("productId") Long productId);
 }

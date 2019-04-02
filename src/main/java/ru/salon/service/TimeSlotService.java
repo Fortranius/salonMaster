@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.salon.model.TimeSlot;
-import ru.salon.model.TimeSlotChange;
+import ru.salon.model.*;
 import ru.salon.repository.ClientRepository;
+import ru.salon.repository.ExpenseRepository;
+import ru.salon.repository.ProductRepository;
 import ru.salon.repository.TimeSlotRepository;
 
 import java.time.Instant;
@@ -22,6 +23,9 @@ public class TimeSlotService {
 
     private TimeSlotRepository timeSlotRepository;
     private ClientRepository clientRepository;
+    private IncomingService incomingService;
+    private ProductRepository productRepository;
+    private ExpenseRepository expenseRepository;
 
     public Page<TimeSlot> findAll(Pageable pageable) {
         return timeSlotRepository.findAll(pageable);
@@ -35,16 +39,38 @@ public class TimeSlotService {
         return timeSlotRepository.findByClientId(clientId);
     }
 
+    public void delete(Long id) {
+        expenseRepository.delete(expenseRepository.findByTimeSlotId(id));
+        timeSlotRepository.deleteById(id);
+    }
+
     public TimeSlot save(TimeSlot timeSlot) {
+        Product product = productRepository.findByHair(timeSlot.getHair());
+        Expense expense = Expense.builder()
+                .countProduct(timeSlot.getHairWeight().intValue())
+                .date(Instant.now())
+                .master(timeSlot.getMaster())
+                .product(product).build();
+        ProductBalance productBalance = incomingService.getProductBalance(product);
         if (timeSlot.getId() != null) {
             TimeSlot old = timeSlotRepository.findById(timeSlot.getId()).orElse(timeSlot);
             timeSlot.setChanges(old.getChanges());
+            Expense oldExpense = expenseRepository.findByTimeSlotId(timeSlot.getId());
+
+            int count = productBalance.getCount() + oldExpense.getCountProduct();
+            if (count < expense.getCountProduct()) return null;
+
+            expense.setId(oldExpense.getId());
             checkChanges(timeSlot, old);
         } else {
+            if (productBalance.getCount() < timeSlot.getHairWeight().intValue()) return null;
             timeSlot.setChanges(Collections.singletonList(TimeSlotChange.builder().date(Instant.now()).change("Создана новая заявка").build()));
         }
         timeSlot.setClient(clientRepository.save(timeSlot.getClient()));
-        return timeSlotRepository.save(timeSlot);
+        TimeSlot saveTimeSlot = timeSlotRepository.save(timeSlot);
+        expense.setTimeSlot(saveTimeSlot);
+        expenseRepository.save(expense);
+        return saveTimeSlot;
     }
 
     private void checkChanges(TimeSlot timeSlot, TimeSlot old) {

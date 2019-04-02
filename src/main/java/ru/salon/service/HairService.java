@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.salon.model.Hair;
 import ru.salon.model.HairCategory;
+import ru.salon.model.Product;
 import ru.salon.model.enumiration.HairType;
 import ru.salon.model.enumiration.MasterCategory;
 import ru.salon.repository.HairCategoryRepository;
 import ru.salon.repository.HairRepository;
+import ru.salon.repository.ProductRepository;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
@@ -20,6 +22,7 @@ public class HairService {
 
     private HairRepository hairRepository;
     private HairCategoryRepository hairCategoryRepository;
+    private ProductRepository productRepository;
 
     @PostConstruct
     public void init() {
@@ -39,6 +42,13 @@ public class HairService {
         hairs.add(Hair.builder().id(1002L).minLength(70).maxLength(79).price(BigDecimal.valueOf(180)).build());
         hairs.add(Hair.builder().id(1003L).minLength(80).price(BigDecimal.valueOf(200)).build());
         hairRepository.saveAll(hairs);
+
+        List<Product> products = new ArrayList<>();
+        products.add(Product.builder().id(1000L).description("Волосы 40-59").hair(hairRepository.getOne(1000L)).build());
+        products.add(Product.builder().id(1001L).description("Волосы 60-69").hair(hairRepository.getOne(1001L)).build());
+        products.add(Product.builder().id(1002L).description("Волосы 70-79").hair(hairRepository.getOne(1002L)).build());
+        products.add(Product.builder().id(1003L).description("Волосы 80 и более").hair(hairRepository.getOne(1003L)).build());
+        productRepository.saveAll(products);
     }
 
     public List<HairCategory> getAllHairCategories() {

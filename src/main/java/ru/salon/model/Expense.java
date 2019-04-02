@@ -1,6 +1,9 @@
 package ru.salon.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -8,6 +11,9 @@ import java.time.Instant;
 @Entity
 @Table(name = "expense")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Expense extends AuditModel {
 
     @Id
@@ -28,4 +34,7 @@ public class Expense extends AuditModel {
     private Master master;
 
     private Instant date;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    private TimeSlot timeSlot;
 }

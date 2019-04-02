@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.salon.model.TimeSlot;
 import ru.salon.service.TimeSlotService;
@@ -29,8 +31,10 @@ public class TimeSlotController {
     }
 
     @PostMapping("/timeSlot")
-    public TimeSlot createTimeSlot(@Valid @RequestBody TimeSlot timeSlot) {
-        return timeSlotService.save(timeSlot);
+    public ResponseEntity<?> createTimeSlot(@Valid @RequestBody TimeSlot timeSlot) {
+        TimeSlot newTimeSlot = timeSlotService.save(timeSlot);
+        if (newTimeSlot == null) return ResponseEntity.badRequest().build();
+        return new ResponseEntity<>(newTimeSlot, HttpStatus.OK);
     }
 
     @GetMapping("/timeSlotsByDate")
@@ -45,5 +49,12 @@ public class TimeSlotController {
     @GetMapping("/timeSlotsByClientId")
     public List<TimeSlot> getTimeSlotsByClientId(@RequestParam("clientId") Long clientId) {
         return timeSlotService.findByClientId(clientId);
+    }
+
+    @DeleteMapping("/timeSlot/{id}")
+    public ResponseEntity<?> deleteTimSlot(@PathVariable Long id)
+    {
+        timeSlotService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }

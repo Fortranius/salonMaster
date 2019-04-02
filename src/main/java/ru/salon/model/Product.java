@@ -1,17 +1,19 @@
 package ru.salon.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "product")
-@Getter
-@Setter
-@ToString
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Product extends AuditModel {
 
     @Id
@@ -28,4 +30,7 @@ public class Product extends AuditModel {
     private BigDecimal purchasePrice;
 
     private BigDecimal sellingPrice;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    private Hair hair;
 }

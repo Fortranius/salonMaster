@@ -44,10 +44,10 @@ public class HairService {
         hairRepository.saveAll(hairs);
 
         List<Product> products = new ArrayList<>();
-        products.add(Product.builder().id(1000L).description("Волосы 40-59").hair(hairRepository.getOne(1000L)).build());
-        products.add(Product.builder().id(1001L).description("Волосы 60-69").hair(hairRepository.getOne(1001L)).build());
-        products.add(Product.builder().id(1002L).description("Волосы 70-79").hair(hairRepository.getOne(1002L)).build());
-        products.add(Product.builder().id(1003L).description("Волосы 80 и более").hair(hairRepository.getOne(1003L)).build());
+        products.add(Product.builder().id(1000L).purchasePrice(BigDecimal.valueOf(140)).description("Волосы 40-59").hair(hairRepository.getOne(1000L)).build());
+        products.add(Product.builder().id(1001L).purchasePrice(BigDecimal.valueOf(140)).description("Волосы 60-69").hair(hairRepository.getOne(1001L)).build());
+        products.add(Product.builder().id(1002L).purchasePrice(BigDecimal.valueOf(140)).description("Волосы 70-79").hair(hairRepository.getOne(1002L)).build());
+        products.add(Product.builder().id(1003L).purchasePrice(BigDecimal.valueOf(140)).description("Волосы 80 и более").hair(hairRepository.getOne(1003L)).build());
         productRepository.saveAll(products);
     }
 

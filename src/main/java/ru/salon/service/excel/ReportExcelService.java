@@ -5,9 +5,11 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+import ru.salon.model.AdditionalIncome;
 import ru.salon.model.Master;
 import ru.salon.model.TimeSlot;
 import ru.salon.model.enumiration.StatusOrder;
+import ru.salon.repository.AdditionalIncomeRepository;
 import ru.salon.repository.MasterRepository;
 import ru.salon.repository.TimeSlotRepository;
 
@@ -32,10 +34,14 @@ public class ReportExcelService {
 
     private MasterRepository masterRepository;
     private TimeSlotRepository timeSlotRepository;
+    private AdditionalIncomeRepository additionalIncomeRepository;
 
-    public ReportExcelService(MasterRepository masterRepository, TimeSlotRepository timeSlotRepository) {
+    public ReportExcelService(MasterRepository masterRepository,
+                              TimeSlotRepository timeSlotRepository,
+                              AdditionalIncomeRepository additionalIncomeRepository) {
         this.masterRepository = masterRepository;
         this.timeSlotRepository = timeSlotRepository;
+        this.additionalIncomeRepository = additionalIncomeRepository;
     }
 
     public ByteArrayInputStream  writeIntoExcel(Instant start, Instant end) throws IOException{
@@ -82,11 +88,18 @@ public class ReportExcelService {
         List<TimeSlot> timeSlots = timeSlotRepository
                 .findByStartSlotBetweenAndMasterAndStatus(start, end, master, StatusOrder.DONE);
 
+        List<AdditionalIncome> additionalIncomes = additionalIncomeRepository
+                .findByDateBetweenAndMaster(start, end, master);
+
         BigDecimal sumIncome = timeSlots.stream().map(TimeSlot::getAllPrice).collect(Collectors.toList())
                 .stream().reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal sumIncomeMaster = timeSlots.stream().map(TimeSlot::getMasterWorkPrice).collect(Collectors.toList())
                 .stream().reduce(BigDecimal.ZERO, BigDecimal::add).divide(BigDecimal.valueOf(2), 2);
+
+        sumIncomeMaster = additionalIncomes.stream().map(AdditionalIncome::getSum).collect(Collectors.toList())
+                .stream().reduce(sumIncomeMaster, BigDecimal::add);
+
         sheet.getRow(rowNumber).createCell(cellNumber)
                 .setCellValue(sumIncome.toString());
         sheet.getRow(rowNumber).createCell(cellNumber + 1)

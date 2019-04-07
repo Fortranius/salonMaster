@@ -1,6 +1,7 @@
 package ru.salon.controller;
 
 import lombok.AllArgsConstructor;
+import org.json.simple.JSONArray;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.salon.dto.AdditionalIncomeCriteria;
 import ru.salon.dto.ExpenseCriteria;
 import ru.salon.dto.IncomingCriteria;
-import ru.salon.dto.StatisticMaster;
 import ru.salon.service.ReportService;
 import ru.salon.service.excel.AdditionalIncomeExcelService;
 import ru.salon.service.excel.ExpenseExcelService;
@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 
 import static ru.salon.utils.Utils.FORMATTER;
 
@@ -114,9 +113,9 @@ public class ReportController {
     }
 
     @GetMapping("/getStatisticMastersReport")
-    public ResponseEntity<List<StatisticMaster>> getStatisticMastersReport(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,
-                                                                           @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end,
-                                                                           @RequestParam(name = "masterId", required = false) Long masterId) {
+    public ResponseEntity<JSONArray> getStatisticMastersReport(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,
+                                                               @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end,
+                                                               @RequestParam(name = "masterId", required = false) Long masterId) {
         return ResponseEntity
                 .ok()
                 .body(reportService.getStatisticBetweenDate(LocalDateTime.parse(start, FORMATTER).atZone(ZoneId.of("+0")).toInstant(),

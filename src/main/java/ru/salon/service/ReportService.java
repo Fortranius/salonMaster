@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
+import ru.salon.dto.StaticData;
 import ru.salon.model.*;
 import ru.salon.model.enumiration.StatusOrder;
 import ru.salon.repository.AdditionalIncomeRepository;
@@ -31,12 +32,12 @@ public class ReportService {
     private TimeSlotRepository timeSlotRepository;
     private AdditionalIncomeRepository additionalIncomeRepository;
 
-    public JSONArray getStatisticBetweenDate(Instant start, Instant end, Long masterId) {
+    public StaticData getStatisticBetweenDate(Instant start, Instant end, Long masterId) {
         Master master = masterRepository.findAll().get(0);
         return generateArray(start, end, master);
     }
 
-    private JSONArray generateArray(Instant start, Instant end, Master master) {
+    private StaticData generateArray(Instant start, Instant end, Master master) {
 
         List<TimeSlot> timeSlots = timeSlotRepository
                 .findByStartSlotBetweenAndMasterAndStatus(start, end, master, StatusOrder.DONE);
@@ -44,7 +45,10 @@ public class ReportService {
                 .findByDateBetweenAndMaster(start, end, master);
         List<Expense> expenses = expenseRepository.findByDateBetweenAndMaster(start, end, master);
 
-        JSONArray list = new JSONArray();
+        JSONArray data = new JSONArray();
+        JSONArray columns = new JSONArray();
+        addColumn(columns, "day", "Дата");
+
         Instant currentDateStart = start;
         Instant currentDateEnd = start.plus(1, ChronoUnit.DAYS);
         while (currentDateStart.isBefore(end)) {
@@ -56,18 +60,20 @@ public class ReportService {
                     master,
                     timeSlots,
                     additionalIncomes,
-                    expenses));
+                    expenses,
+                    columns));
             currentDateStart = currentDateStart.plus(1, ChronoUnit.DAYS);
             currentDateEnd = currentDateEnd.plus(1, ChronoUnit.DAYS);
-            list.add(obj);
+            data.add(obj);
         }
-        return list;
+        return StaticData.builder().columns(columns).data(data).build();
     }
 
     private JSONObject generateAllSum(Instant start, Instant end, Master master,
                                       List<TimeSlot> timeSlots,
                                       List<AdditionalIncome> additionalIncomes,
-                                      List<Expense> expenses) {
+                                      List<Expense> expenses,
+                                      JSONArray columns) {
 
         BigDecimal sumIncome = timeSlots.stream().filter(timeSlot ->
                 timeSlot.getStartSlot().isAfter(start) && timeSlot.getStartSlot().isBefore(end))
@@ -87,11 +93,24 @@ public class ReportService {
         masterObject.put("sumIncome" + master.getId(), sumIncome);
         masterObject.put("sumIncomeMaster" + master.getId(), sumIncomeMaster);
 
+        addColumn(columns, "master" + master.getId() + ".sumIncome" + master.getId(), "Услуги");
+        addColumn(columns, "master" + master.getId() + ".sumIncomeMaster" + master.getId(), "З/п");
+
         Map<Product, Integer> sums = expenses.stream().filter(expense ->
                 expense.getDate().isAfter(start) && expense.getDate().isBefore(end))
                 .collect(Collectors.groupingBy(Expense::getProduct, Collectors.summingInt(Expense::getCountProduct)));
 
-        sums.forEach((product, integer) -> masterObject.put("product" + master.getId() + product.getId(), integer));
+        sums.forEach((product, integer) -> {
+            masterObject.put("product" + master.getId() + product.getId(), integer);
+            addColumn(columns, "master" + master.getId() + ".product" + master.getId() + product.getId(), product.getDescription());
+        });
         return masterObject;
+    }
+
+    private void addColumn(JSONArray columns, String dataField, String text) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("dataField", dataField);
+        jsonObject.put("text", text);
+        columns.add(jsonObject);
     }
 }

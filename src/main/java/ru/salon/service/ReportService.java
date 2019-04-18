@@ -39,7 +39,7 @@ public class ReportService {
     private StaticData generateArray(Instant start, Instant end, List<Master> masters) {
         JSONArray data = new JSONArray();
         JSONArray columns = new JSONArray();
-        addColumn(columns, "day", "Дата", null, null);
+        addColumn(columns, "day", "Дата");
 
         masters.forEach(master -> {
             List<Expense> expenses = expenseRepository.findByDateBetweenAndMaster(start, end, master);
@@ -47,15 +47,17 @@ public class ReportService {
                     expense.getDate().isAfter(start) && expense.getDate().isBefore(end))
                     .collect(Collectors.groupingBy(Expense::getProduct, Collectors.summingInt(Expense::getCountProduct)));
 
-            addColumn(columns, master.getId().toString(), master.getPerson().getName(), "3", "0");
-
-            addColumn(columns, "master" + master.getId() + ".sumIncome" + master.getId(), "Услуги", null, "1");
-            addColumn(columns, "master" + master.getId() + ".sumIncomeMaster" + master.getId(), "З/п", null, "1");
-
-            sums.forEach((product, integer) -> {
-                addColumn(columns, "master" + master.getId() + ".product" + master.getId() + product.getId(),
-                        product.getDescription(), null, "1");
-            });
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("Header", master.getPerson().getName());
+            JSONArray columnArrays = new JSONArray();
+            columnArrays.add(generateColumn("master" + master.getId() + ".sumIncome" + master.getId(), "Услуги"));
+            columnArrays.add(generateColumn("master" + master.getId() + ".sumIncomeMaster" + master.getId(), "З/п"));
+            sums.forEach((product, integer) ->
+                columnArrays.add(generateColumn("master" + master.getId() + ".product" + master.getId() + product.getId(),
+                        product.getDescription()))
+            );
+            jsonObject.put("columns",columnArrays);
+            columns.add(jsonObject);
         });
 
         Instant currentDateStart = start;
@@ -120,12 +122,17 @@ public class ReportService {
         return masterObject;
     }
 
-    private void addColumn(JSONArray columns, String dataField, String text, String colSpan, String row) {
+    private JSONObject generateColumn(String accessor, String header) {
         JSONObject jsonObject = new JSONObject();
-        if (colSpan == null) jsonObject.put("dataField", dataField);
-        jsonObject.put("text", text);
-        if (colSpan != null) jsonObject.put("colSpan", colSpan);
-        if (row != null) jsonObject.put("row", row);
+        jsonObject.put("accessor", accessor);
+        jsonObject.put("Header", header);
+        return jsonObject;
+    }
+
+    private void addColumn(JSONArray columns, String dataField, String text) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("accessor", dataField);
+        jsonObject.put("Header", text);
         columns.add(jsonObject);
     }
 }

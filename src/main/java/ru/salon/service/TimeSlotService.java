@@ -48,7 +48,7 @@ public class TimeSlotService {
         Product product = productRepository.findByHair(timeSlot.getHair());
         Expense expense = Expense.builder()
                 .countProduct(timeSlot.getHairWeight().intValue())
-                .date(Instant.now())
+                .date(timeSlot.getStartSlot())
                 .master(timeSlot.getMaster())
                 .product(product).build();
         ProductBalance productBalance = incomingService.getProductBalance(product);

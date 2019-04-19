@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,6 +34,7 @@ public class ReportService {
     private AdditionalIncomeRepository additionalIncomeRepository;
 
     public StaticData getStatisticBetweenDate(Instant start, Instant end, Long masterId) {
+        if (masterId != null) return generateArray(start, end, Collections.singletonList(masterRepository.getOne(masterId)));
         return generateArray(start, end, masterRepository.findAll());
     }
 
@@ -117,7 +119,8 @@ public class ReportService {
                 .collect(Collectors.groupingBy(Expense::getProduct, Collectors.summingInt(Expense::getCountProduct)));
 
         sums.forEach((product, integer) -> {
-            masterObject.put("product" + master.getId() + product.getId(), integer);
+            BigDecimal sum = product.getPurchasePrice().multiply(BigDecimal.valueOf(integer));
+            masterObject.put("product" + master.getId() + product.getId(), sum);
         });
         return masterObject;
     }

@@ -121,4 +121,14 @@ public class ReportController {
                 .body(reportService.getStatisticBetweenDate(LocalDateTime.parse(start, FORMATTER).atZone(ZoneId.of("+0")).toInstant(),
                         LocalDateTime.parse(end, FORMATTER).atZone(ZoneId.of("+0")).toInstant(), masterId));
     }
+
+    @GetMapping("/getIncomesBetweenDate")
+    public ResponseEntity<StaticData> getIncomesBetweenDate(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String start,
+                                                                @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String end,
+                                                                @RequestParam(name = "masterId", required = false) Long masterId) {
+        return ResponseEntity
+                .ok()
+                .body(reportService.getIncomesBetweenDate(LocalDateTime.parse(start, FORMATTER).atZone(ZoneId.of("+0")).toInstant(),
+                        LocalDateTime.parse(end, FORMATTER).atZone(ZoneId.of("+0")).toInstant(), masterId));
+    }
 }

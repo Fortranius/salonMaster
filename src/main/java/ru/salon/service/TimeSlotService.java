@@ -45,6 +45,9 @@ public class TimeSlotService {
     }
 
     public TimeSlot save(TimeSlot timeSlot) {
+        if (timeSlot.getHair() == null) {
+            return timeSlotRepository.save(timeSlot);
+        }
         Product product = productRepository.findByHair(timeSlot.getHair());
         Expense expense = Expense.builder()
                 .countProduct(timeSlot.getHairWeight().intValue())

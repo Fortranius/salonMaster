@@ -10,6 +10,7 @@ import ru.salon.model.Client;
 import ru.salon.model.Person;
 import ru.salon.repository.ClientRepository;
 
+import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Iterator;
@@ -20,9 +21,11 @@ public class ClientImportService {
 
     private final ClientRepository clientRepository;
 
+    @PostConstruct
     public void init() {
         try {
-            readData();
+            if (clientRepository.findAll().isEmpty())
+                readData();
         } catch (IOException e) {
             e.printStackTrace();
         }

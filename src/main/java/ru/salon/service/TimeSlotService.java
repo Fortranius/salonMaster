@@ -45,6 +45,7 @@ public class TimeSlotService {
     }
 
     public TimeSlot save(TimeSlot timeSlot) {
+        timeSlot.setClient(clientRepository.save(timeSlot.getClient()));
         if (timeSlot.getHair() == null) {
             return timeSlotRepository.save(timeSlot);
         }
@@ -69,7 +70,6 @@ public class TimeSlotService {
             if (productBalance.getCount() < timeSlot.getHairWeight().intValue()) return null;
             timeSlot.setChanges(Collections.singletonList(TimeSlotChange.builder().date(Instant.now()).change("Создана новая заявка").build()));
         }
-        timeSlot.setClient(clientRepository.save(timeSlot.getClient()));
         TimeSlot saveTimeSlot = timeSlotRepository.save(timeSlot);
         expense.setTimeSlot(saveTimeSlot);
         expenseRepository.save(expense);

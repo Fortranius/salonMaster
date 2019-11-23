@@ -12,8 +12,6 @@ public class Utils {
 
     public static String getMonth(int month) {
         switch (month) {
-            case 1:
-                return "января";
             case 2:
                 return "февраля";
             case 3:

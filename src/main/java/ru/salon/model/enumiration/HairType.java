@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum HairType {
+    HAIR_CORRECTION("Коррекция волос"),
     HAIR_EXTENSION("Наращивание волос"),
     HAIR_REMOVAL("Снятие волос");
 

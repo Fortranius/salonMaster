@@ -21,6 +21,7 @@ public class ProcedureService {
         List<Procedure> procedures = new ArrayList<>();
         procedures.add(Procedure.builder().id(1000L).description("Наращивание волос").hairType(HairType.HAIR_EXTENSION).build());
         procedures.add(Procedure.builder().id(1001L).description("Снятие волос").hairType(HairType.HAIR_REMOVAL).build());
+        procedures.add(Procedure.builder().id(1002L).description("Коррекция волос").hairType(HairType.HAIR_CORRECTION).build());
         procedureRepository.saveAll(procedures);
     }
 }

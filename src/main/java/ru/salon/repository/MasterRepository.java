@@ -14,4 +14,5 @@ public interface MasterRepository extends JpaRepository<Master, Long> {
     @Query("Select c from Master c where c.person.name like %:name% order by c.person.name")
     List<Master> findByNameContaining(@Param("name")String name);
 
+    List<Master> findAllByOrderByIdAsc();
 }

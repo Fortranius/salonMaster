@@ -36,4 +36,9 @@ public class Master extends AuditModel implements Serializable {
     private WorkingDay workingDay;
 
     private Instant startDateWork;
+
+    @ElementCollection
+    @CollectionTable(name="workDays", joinColumns=@JoinColumn(name="work_day_id"))
+    @Column(name="workDay")
+    private List<Instant> workDays;
 }

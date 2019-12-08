@@ -34,7 +34,7 @@ public class MasterController {
 
     @GetMapping("/allMasters")
     public List<Master> getAllMasters() {
-        return masterRepository.findAll();
+        return masterService.findAll();
     }
 
     @GetMapping("/allMastersByWorkDay")
@@ -57,7 +57,7 @@ public class MasterController {
 
     @PostMapping("/master")
     public Master createMaster(@Valid @RequestBody Master master) {
-        return masterRepository.save(master);
+        return masterService.save(master);
     }
 
     @PutMapping("/master")

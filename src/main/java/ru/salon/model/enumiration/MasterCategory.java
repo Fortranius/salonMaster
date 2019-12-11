@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum MasterCategory {
+    GRAND_MASTER("Гранд мастер"),
     START("Начинающий мастер"),
     MIDDLE("Стандартный мастер"),
     MIDDLE_PLUS("Мастер стандарт плюс"),

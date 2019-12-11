@@ -32,7 +32,8 @@ public class HairService {
         hairsCategory.add(HairCategory.builder().id(1001L).price(BigDecimal.valueOf(40)).masterType(MasterCategory.MIDDLE).hairType(HairType.HAIR_EXTENSION).build());
         hairsCategory.add(HairCategory.builder().id(1002L).price(BigDecimal.valueOf(50)).masterType(MasterCategory.MIDDLE_PLUS).hairType(HairType.HAIR_EXTENSION).build());
         hairsCategory.add(HairCategory.builder().id(1003L).price(BigDecimal.valueOf(60)).masterType(MasterCategory.TOP).hairType(HairType.HAIR_EXTENSION).build());
-        hairsCategory.add(HairCategory.builder().id(1004L).price(BigDecimal.valueOf(30)).hairType(HairType.HAIR_REMOVAL).build());
+        hairsCategory.add(HairCategory.builder().id(1004L).price(BigDecimal.valueOf(20)).hairType(HairType.HAIR_REMOVAL).build());
+        hairsCategory.add(HairCategory.builder().id(1005L).price(BigDecimal.valueOf(70)).masterType(MasterCategory.GRAND_MASTER).hairType(HairType.HAIR_EXTENSION).build());
 
         hairCategoryRepository.saveAll(hairsCategory);
 
